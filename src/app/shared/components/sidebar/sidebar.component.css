@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sidebar-border{
+    border-right:  1px solid #EAECF0;
+}
+
+
+@layer utilities{
+    .is-active, .link:hover{
+         @apply bg-blue-600 py-2 px-2 text-white;
+    }
+
+    .is-active img, .link:hover img{
+        filter: brightness(0) invert(1);
+    }
+}

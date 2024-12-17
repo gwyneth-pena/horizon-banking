@@ -1,0 +1,24 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { PlaidLinkComponent } from './plaid-link.component';
+import { HttpClientModule } from '@angular/common/http';
+
+describe('PlaidLinkComponent', () => {
+  let component: PlaidLinkComponent;
+  let fixture: ComponentFixture<PlaidLinkComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PlaidLinkComponent, HttpClientModule]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(PlaidLinkComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
