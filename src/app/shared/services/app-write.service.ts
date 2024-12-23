@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Account, Client, Databases, ID } from 'appwrite';
+import { Account, Client, Databases, ID, Query } from 'appwrite';
 import { environment } from '../../../environments/environment';
 
 
@@ -40,13 +40,40 @@ export class AppWriteService {
     );
   }
 
+  async getDocument(databaseId: string, collectionId: string, filter:string[]) {
+  try {
+    const document = await this.databases.listDocuments(
+      databaseId,
+      collectionId,
+      filter
+    );
+
+    return document;
+  } catch (error:any) {
+    console.error('Error reading document:', error.message);
+    return null;
+  }
+}
+
   login(email: string, password: string):any {
     return this.account.createEmailPasswordSession(email, password);
   }
 
+  logout(){
+    return this.account.deleteSession('current');
+  }
+
   async getCurrentUser() {
     try {
-      const user = await this.account.get();
+      let user = await this.account.get();
+      if(user){
+        const userAddl = await this.getDocument(
+          environment.appwriteDatabaseId,
+          environment.appwriteUsersColId,
+          [Query.equal('userId', user.$id)]
+        );
+        user = {...user, ...userAddl?.documents?.[0]};
+      }
       return user;
     } catch (error) {
       return null; 

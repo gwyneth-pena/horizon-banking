@@ -46,7 +46,10 @@ export class SignupComponent {
       '',
       [Validators.required, Validators.maxLength(5), Validators.minLength(5)],
     ],
-    dateOfBirth: ['', [Validators.required, this.maxYearValidator(new Date().getFullYear())]],
+    dateOfBirth: [
+      '',
+      [Validators.required, this.maxYearValidator(new Date().getFullYear())],
+    ],
     ssn: [
       '',
       [Validators.required, Validators.maxLength(4), Validators.minLength(4)],
@@ -99,6 +102,7 @@ export class SignupComponent {
       return null;
     };
   }
+
   async submit() {
     this.submittedForm = true;
     if (this.form.valid) {
@@ -114,39 +118,55 @@ export class SignupComponent {
           `${firstName} ${lastName}`
         );
 
-        if (authUser) {
-          const user = await this.appWriteService.login(
-            email || '',
-            password || ''
-          );
-          if (user) {
-            const dwollaCustomerId = await this.createDwollaCustomer(
-              this.form.value
-            );
-
-            const data = await this.appWriteService.createDocument(
-              databaseId,
-              userCollectionId,
-              {
-                ...this.form.value,
-                userId: user.$id,
-                dwollaCustomerId: dwollaCustomerId,
-              }
-            );
-
-            if (data) {
-              this.ngxSpinner.hide();
-              this.form.reset();
-              this.submittedForm = false;
-              this.alertData = {
-                message: 'Sign up successful.',
-                type: 'success',
-              };
-              this.router.navigateByUrl('/dashboard');
-            }
-          }
+        if (!authUser) {
+          this.ngxSpinner.hide();
+          return;
         }
+
+        const user = await this.appWriteService.login(
+          email || '',
+          password || ''
+        );
+
+        if (!user) {
+          this.ngxSpinner.hide();
+          return;
+        }
+
+        const dwollaCustomerId = await this.createDwollaCustomer(
+          this.form.value
+        );
+
+        if (!dwollaCustomerId){
+          this.ngxSpinner.hide();
+          return;
+        };
+
+        const formData = this.form.value;
+        delete formData.password;
+        const data = await this.appWriteService.createDocument(
+          databaseId,
+          userCollectionId,
+          {
+            ...formData,
+            userId: user.userId,
+            dwollaCustomerId: dwollaCustomerId,
+          }
+        );
+
+        if (data) {
+          this.ngxSpinner.hide();
+          this.form.reset();
+          this.submittedForm = false;
+          this.alertData = {
+            message: 'Sign up successful.',
+            type: 'success',
+          };
+          this.router.navigateByUrl('/dashboard');
+        }
+
       } catch (e: any) {
+
         if (e.message?.includes('exist')) {
           this.alertData = {
             message: 'User is already created.',
@@ -154,6 +174,7 @@ export class SignupComponent {
           };
         }
         this.ngxSpinner.hide();
+
       }
     }
   }

@@ -53,25 +53,31 @@ export class LoginComponent {
 
   async login() {
     this.submittedForm = true;
+
     if (this.form.valid) {
       const { email, password } = this.form.value;
       this.ngxSpinner.show();
+
       try {
+
         const session = await this.appWriteService.login(email, password);
-        if (session) {
-          this.ngxSpinner.hide();
-          this.alertData = {
-            type: 'success',
-            message: 'Login success.',
-          };
-          this.router.navigateByUrl('/dashboard');
-        }
+        if(!session) return;
+
+        this.ngxSpinner.hide();
+        this.alertData = {
+          type: 'success',
+          message: 'Login success.',
+        };
+        this.router.navigateByUrl('/dashboard');
+
       } catch (e: any) {
+
         this.ngxSpinner.hide();
         this.alertData = {
           type: 'danger',
           message: 'Invalid credentials.',
         };
+
       }
     }
   }

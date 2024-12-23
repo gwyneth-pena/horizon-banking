@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, input, InputSignal } from '@angular/core';
+import { Component, effect, inject, input, InputSignal, output } from '@angular/core';
 import { PlaidService } from '../../services/plaid.service';
 import { NgxPlaidLinkService, PlaidLinkHandler } from 'ngx-plaid-link';
 import { environment } from '../../../../environments/environment';
+import { AppWriteService } from '../../services/app-write.service';
 
 @Component({
   selector: 'app-plaid-link',
@@ -13,10 +14,12 @@ import { environment } from '../../../../environments/environment';
 export class PlaidLinkComponent {
   color: InputSignal<string> = input('');
   user = input();
+  bankAdded = output();
 
   private plaidService = inject(PlaidService);
   private plaidLinkService = inject(NgxPlaidLinkService);
   private plaidLinkHandler: PlaidLinkHandler | undefined;
+  private appwriteService = inject(AppWriteService);
 
   plaidPublicToken: string = '';
 
@@ -51,7 +54,23 @@ export class PlaidLinkComponent {
     this.plaidLinkService
       .createPlaid(
         Object.assign({}, this.config, {
-          onSuccess: (token: any, metadata: any) => {console.log(metadata, token)},
+          onSuccess: (token: any, metadata: any) => {
+            const user: any = this.user();
+            this.plaidService
+              .createExchangePublicToken(token, user)
+              .subscribe({
+                next: async (response) => {
+                  if (await response.status == 'completed') {
+                    await this.appwriteService.createDocument(
+                      environment.appwriteDatabaseId,
+                      environment.apperiteBanksColId,
+                      await response.bankAccountData
+                    );
+                    this.bankAdded.emit();
+                  }
+                },
+              });
+          },
           onExit: (error: any, metadata: any) => {},
           onEvent: (eventName: any, metadata: any) => {},
         })

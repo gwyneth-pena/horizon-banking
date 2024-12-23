@@ -1,9 +1,16 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterModule,
+} from '@angular/router';
+import { AppWriteService } from '../../services/app-write.service';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, RouterModule, NgxSpinnerModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })
@@ -30,4 +37,22 @@ export class SidebarComponent {
       imgSrc: '/icons/money-send.svg',
     },
   ];
+  appWriteService = inject(AppWriteService);
+  router = inject(Router);
+  spinner = inject(NgxSpinnerService);
+  user: any;
+
+  async ngOnInit() {
+    this.user = await this.appWriteService.getCurrentUser();
+  }
+
+  logout() {
+    this.spinner.show();
+    this.appWriteService.logout().then(() => {
+      this.spinner.hide();
+      this.router.navigateByUrl('/login');
+    }).catch(()=>{
+      this.spinner.hide();
+    });
+  }
 }

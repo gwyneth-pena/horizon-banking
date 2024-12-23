@@ -158,6 +158,21 @@ export const addFundingSource = async ({
   }
 };
 
+const getInstitution = async (institutionId: any) => {
+  try {
+    const institutionResponse = await plaidClient.institutionsGetById({
+      institution_id: institutionId as string,
+      country_codes: ['US'] as CountryCode[],
+    });
+    const intitution = institutionResponse.data.institution;
+
+    return intitution;
+  } catch (error) {
+    console.error('An error occurred while getting the accounts:', error);
+    return null;
+  }
+};
+
 app.post('/api/create-plaid-link-token', async (req, res) => {
   const { $id, name } = req.body;
   try {
@@ -213,18 +228,48 @@ app.post('/api/exchange-public-token', async (req, res) => {
     if (!fundingSourceUrl) throw Error;
 
     const bankAccount = {
-      userId: user.$id,
+      userId: await user.$id,
       bankId: itemId,
       accountId: accountData.account_id,
       accessToken,
       fundingSourceUrl,
-      sharableId: btoa(accountData.account_id),
+      shareableId: btoa(accountData.account_id),
     };
 
     res.status(200).json({ status: 'completed', bankAccountData: bankAccount });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Token generation failed.' });
+  }
+});
+
+app.get('/api/accounts', async (req, res) => {
+  try {
+    const token:any = req.query['bankToken'] || '';
+    const accountsResponse = await plaidClient.accountsGet({
+      access_token: token,
+    });
+
+    const accountData = accountsResponse.data.accounts[0];
+    const institution = await getInstitution(
+      accountsResponse.data.item.institution_id!
+    );
+
+    const account = {
+      id: accountData.account_id,
+      availableBalance: accountData.balances.available!,
+      currentBalance: accountData.balances.current!,
+      institutionId: institution?.institution_id,
+      name: accountData.name,
+      officialName: accountData.official_name,
+      mask: accountData.mask!,
+      type: accountData.type as string,
+      subtype: accountData.subtype! as string,
+    };
+    res.status(200).json({ account });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Something went wrong.' });
   }
 });
 
@@ -259,10 +304,10 @@ app.post('/api/dwolla-customer', async (req, res) => {
         Accept: 'application/vnd.dwolla.v1.hal+json',
         Authorization: `Bearer ${access_token}`,
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(user),
     });
     const responseLocation = response.headers.get('location')?.split('/');
-    const id = responseLocation?.[responseLocation?.length-1] || undefined;
+    const id = responseLocation?.[responseLocation?.length - 1] || undefined;
     res.status(200).json({ customer_id: id });
   } catch (error) {
     console.log(error);

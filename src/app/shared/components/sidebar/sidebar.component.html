@@ -1,4 +1,4 @@
-<div class="flex flex-col sidebar-border h-screen left-0 top-0 px-6 py-8 fixed">
+<div class="flex flex-col sidebar-border h-screen left-0 top-0 px-6 pt-8 pb-4 fixed bg-white">
   <a class="flex items-center mb-5 cursor-pointer" routerLink="/">
     <img
       src="/icons/logo.svg"
@@ -17,19 +17,24 @@
       class="outline-none flex-1 bg-transparent"
     />
   </div>
-  <nav class="my-5">
+  <nav class="my-5 flex flex-col h-screen">
     @for (url of urls; track $index) {
     <a
       [routerLink]="url.url"
       routerLinkActive="is-active"
       class="flex rounded-lg hover:text-white hover:bg-blue-600 py-2 px-2 mb-3 link"
     >
-      <img
-        [src]="url.imgSrc"
-        class="size-6 mr-3"
-      />
-      <p class="font-bold text-sm">{{url.name}}</p>
+      <img [src]="url.imgSrc" class="size-6 mr-3" />
+      <p class="font-bold text-sm">{{ url.name }}</p>
     </a>
     }
+
+    <div class="mt-auto flex align-middle cursor-pointer justify-between" (click)="logout()">
+      <div class="flex-col">
+        <p class="font-bold text-gray-700">{{ user?.name }}</p>
+        <p class="text-gray-600">{{ user?.email }}</p>
+      </div>
+      <i class="my-auto"><img src="/icons/logout.svg"></i>
+    </div>
   </nav>
 </div>
