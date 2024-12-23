@@ -1,10 +1,8 @@
-<div class="flex flex-col sidebar-border h-screen left-0 top-0 px-6 pt-8 pb-4 fixed bg-white">
+<div
+  class="flex flex-col sidebar-border h-screen left-0 top-0 px-6 pt-5 pb-4 fixed bg-white lg:pt-8"
+>
   <a class="flex items-center mb-5 cursor-pointer" routerLink="/">
-    <img
-      src="/icons/logo.svg"
-      alt="Logo"
-      class="size-[32px] max-xl:size-14 mr-3"
-    />
+    <img src="/icons/logo.svg" alt="Logo" class="size-15px lg:size-32px mr-3" />
     <h1 class="text-2xl font-bold">Horizon</h1>
   </a>
   <div
@@ -21,7 +19,8 @@
     @for (url of urls; track $index) {
     <a
       [routerLink]="url.url"
-      routerLinkActive="is-active"
+      (click)="setIsActiveUrl()"
+      [routerLinkActive]="url.isActive ? 'is-active' : ''"
       class="flex rounded-lg hover:text-white hover:bg-blue-600 py-2 px-2 mb-3 link"
     >
       <img [src]="url.imgSrc" class="size-6 mr-3" />
@@ -29,12 +28,15 @@
     </a>
     }
 
-    <div class="mt-auto flex align-middle cursor-pointer justify-between" (click)="logout()">
+    <div
+      class="mt-auto flex align-middle cursor-pointer justify-between"
+      (click)="logout()"
+    >
       <div class="flex-col">
         <p class="font-bold text-gray-700">{{ user?.name }}</p>
         <p class="text-gray-600">{{ user?.email }}</p>
       </div>
-      <i class="my-auto"><img src="/icons/logout.svg"></i>
+      <i class="my-auto"><img src="/icons/logout.svg" /></i>
     </div>
   </nav>
 </div>

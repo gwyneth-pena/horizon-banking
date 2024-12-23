@@ -1,5 +1,5 @@
-<div class="flex">
-  <div class="flex flex-col gap-1 w-4/6">
+<div class="flex-col md:flex md:flex-row">
+  <div class="w-full flex flex-col gap-1 md:w-4/6">
     <app-title-header
       titleHTML="<h2 class='text-24 lg:text-30 font-bold text-gray-900'>Welcome, <span class='text-blue-500'>{{
         user()?.firstName
@@ -8,21 +8,25 @@
     ></app-title-header>
 
     <div
-      class="bg-white border border-gray-300 rounded-lg shadow-lg my-10 py-5 w-full flex"
+      class="my-5 flex-col bg-white border border-gray-300 rounded-lg shadow-lg md:my-10 py-5 w-full md:flex md:flex-row"
     >
-      <div class="w-1/4">
-        <canvas id="donut">{{ donut }}</canvas>
-      </div>
-      <div class="w-1/4 py-3 flex flex-col justify-between">
-        <h3 class="font-bold text-base text-gray-700">
-          {{ banks()?.length || 0 }} Bank Accounts
-        </h3>
-        <div class="flex flex-col">
-          <p class="text-gray-500">Total Current Balance</p>
-          <h3 class="font-bold text-2xl">${{ banksTotalBalance() | async }}</h3>
+      <div class="flex justify-between w-full md:w-2/4">
+        <div class="w-2/6 md:w-1/2">
+          <canvas id="donut">{{ donut }}</canvas>
+        </div>
+        <div class="w-4/6 md:w-1/2 py-3 flex flex-col justify-between">
+          <h3 class="font-bold text-base text-gray-700">
+            {{ banks()?.length || 0 }} Bank Accounts
+          </h3>
+          <div class="flex flex-col">
+            <p class="text-gray-500">Total Current Balance</p>
+            <h3 class="font-bold text-2xl">
+              ${{ banksTotalBalance() | async }}
+            </h3>
+          </div>
         </div>
       </div>
-      <div class="w-2/4 text-right py-3 pr-10">
+      <div class="w-full md:w-2/4 text-right py-3 pr-10">
         <app-plaid-link
           [user]="user()"
           (bankAdded)="getBanks()"
@@ -40,7 +44,7 @@
           @for(bank of banks(); track bank.$id){
           <label
             for="tab1"
-            class="cursor-pointer px-4 py-2 font-semibold hover:text-blue-500"
+            class="cursor-pointer px-4 py-2 font-bold hover:text-blue-500"
             [ngClass]="{
               'text-blue-500': bank.active,
               'border-b-2': bank.active,
@@ -53,7 +57,9 @@
           </label>
           }
         </div>
-        <div class="my-10 m bg-blue-100 flex justify-between align-middle rounded-lg items-center">
+        <div
+          class="my-10 m bg-blue-100 flex justify-between align-middle rounded-lg items-center"
+        >
           <div class="flex px-8 py-4">
             <div
               class="w-8 h-8 bg-blue-500 rounded-full text-white flex justify-center text-center items-center"
@@ -69,7 +75,7 @@
               </p>
             </div>
           </div>
-          <div class="mx-8 py-2 px-3 bg-green-200 text-green-900 rounded-full">
+          <div class="mx-8 py-2 px-3 bg-blue-300 text-blue-700 rounded-full">
             {{ activeBank()?.type | titlecase }}
           </div>
         </div>
@@ -79,7 +85,7 @@
       </ng-template>
     </div>
   </div>
-  <div class="w-2/6 py-5">
+  <div class="w-full md:w-2/6 py-5">
     <p>weqwew</p>
   </div>
 </div>

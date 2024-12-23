@@ -1,8 +1,19 @@
-<div class="flex">
-  <div class="w-1/6">
+<div class="flex justify-between align-middle pt-5 px-6 border-b border-b-gray-200 lg:hidden">
+  <a class="flex items-center mb-5 cursor-pointer" routerLink="/">
+    <img
+      src="/icons/logo.svg"
+      alt="Logo"
+      class="size-15px mr-3"
+    />
+    <h1 class="text-2xl font-bold">Horizon</h1>
+  </a>
+  <i (click)="isOpen=!isOpen"><img class="menu-icon" src="/icons/hamburger.svg" /></i>
+</div>
+<div class="flex-col lg:flex lg:flex-row">
+  <div class="w-full hidden md:w-1/6 lg:flex sidebar" [ngClass]="{'hidden': !isOpen}">
     <app-sidebar></app-sidebar>
   </div>
-  <div class="w-full px-24 py-8 md:5/6">
+  <div class="px-3 py-5 w-full md:px-10 md:py-8 md:w-5/6">
     <router-outlet></router-outlet>
   </div>
 </div>

@@ -15,30 +15,34 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
   styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent {
+  router = inject(Router);
   urls = [
     {
       name: 'Home',
-      url: '/',
+      url: '/dashboard',
       imgSrc: '/icons/home.svg',
+      isActive: true,
     },
     {
       name: 'My Banks',
       url: '/my-banks',
       imgSrc: '/icons/dollar-circle.svg',
+      isActive: false,
     },
     {
       name: 'Transaction History',
       url: '/transaction-history',
       imgSrc: '/icons/transaction.svg',
+      isActive: false,
     },
     {
       name: 'Payment Transfer',
       url: '/payment-transfer',
       imgSrc: '/icons/money-send.svg',
+      isActive: false,
     },
   ];
   appWriteService = inject(AppWriteService);
-  router = inject(Router);
   spinner = inject(NgxSpinnerService);
   user: any;
 
@@ -48,11 +52,26 @@ export class SidebarComponent {
 
   logout() {
     this.spinner.show();
-    this.appWriteService.logout().then(() => {
-      this.spinner.hide();
-      this.router.navigateByUrl('/login');
-    }).catch(()=>{
-      this.spinner.hide();
+    this.appWriteService
+      .logout()
+      .then(() => {
+        this.spinner.hide();
+        this.router.navigateByUrl('/login');
+      })
+      .catch(() => {
+        this.spinner.hide();
+      });
+  }
+
+  setIsActiveUrl() {
+    this.urls = this.urls.map((u: any) => {
+      console.log(u.url, this.router.url);
+      if (u.url !== this.router.url) {
+        u.isActive = false;
+      } else {
+        u.isActive = true;
+      }
+      return u;
     });
   }
 }
