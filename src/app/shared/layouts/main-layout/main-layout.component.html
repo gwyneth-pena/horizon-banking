@@ -11,7 +11,7 @@
 </div>
 <div class="flex-col lg:flex lg:flex-row">
   <div class="w-full hidden md:w-1/6 lg:flex sidebar" [ngClass]="{'hidden': !isOpen}">
-    <app-sidebar></app-sidebar>
+    <app-sidebar (close)="screenWidth <= 768 ? isOpen=false : null"></app-sidebar>
   </div>
   <div class="px-3 py-5 w-full md:px-10 md:py-8 md:w-5/6">
     <router-outlet></router-outlet>

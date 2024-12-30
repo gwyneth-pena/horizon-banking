@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import {
   Router,
   RouterLink,
@@ -16,6 +16,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 })
 export class SidebarComponent {
   router = inject(Router);
+  close = output();
   urls = [
     {
       name: 'Home',
@@ -65,7 +66,6 @@ export class SidebarComponent {
 
   setIsActiveUrl() {
     this.urls = this.urls.map((u: any) => {
-      console.log(u.url, this.router.url);
       if (u.url !== this.router.url) {
         u.isActive = false;
       } else {
@@ -73,5 +73,6 @@ export class SidebarComponent {
       }
       return u;
     });
+    this.close.emit();
   }
 }

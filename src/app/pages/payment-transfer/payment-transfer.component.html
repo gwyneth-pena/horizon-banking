@@ -1,13 +1,141 @@
 <div>
   <app-title-header
-    class="my-10"
     titleHTML="<h2 class='text-24 lg:text-30 font-bold text-gray-900'>Payment Transfer</h2>"
     desc="Please provide any specific details or notes related to the payment transfer"
   ></app-title-header>
-
+  <div class="h-10"></div>
   <app-title-header
-    titleHTML="<h2 class='text-18 lg:text-30 font-bold text-gray-900'>Transfer Details</h2>"
-    desc="Enter the details of the recepient"
+    titleHTML="<h4 class='text-18 lg:text-18 font-bold text-gray-900'>Transfer Details</h4>"
+    desc="Enter the details of the sender"
   ></app-title-header>
-  <hr class="text-gray-300 w-full">
+  <hr class="text-gray-300 w-full mt-3 lg:w-10/12" />
+
+  <form
+    class="px-2 py-8 w-full lg:w-10/12"
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+  >
+    @if(alertData.type){
+    <app-alert
+      [message]="alertData.message"
+      [type]="alertData.type"
+    ></app-alert>
+    }
+
+    <div class="flex-col gap-0 lg:flex lg:flex-row lg:gap-20">
+      <div class="w-full lg:w-2/6">
+        <label class="font-medium" for="senderBank">Source Bank</label>
+        <p class="text-gray-500">
+          Select the back account you want to transfer funds from
+        </p>
+      </div>
+      <div class="w-full flex align-top mt-4 lg:w-4/6 lg:mt-0">
+        <app-bank-dropdown
+          class="w-full lg:w-1/2"
+          formControlName="senderBank"
+          id="senderBank"
+          name="senderBank"
+          [isInvalidInput]="
+            submittedForm && form.controls['senderBank'].errors ? true : false
+          "
+        ></app-bank-dropdown>
+      </div>
+    </div>
+    <hr class="text-gray-300 w-full my-5" />
+    <div class="flex-col gap-0 lg:flex lg:flex-row lg:gap-20">
+      <div class="w-full lg:w-2/6">
+        <label class="font-medium" for="name">Transfer Note</label>
+        <p class="text-gray-500">
+          Please provide any information or instructions related to transfer
+        </p>
+      </div>
+      <div class="w-full flex align-top mt-4 lg:w-4/6 lg:mt-0">
+        <textarea
+          class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Enter transfer note"
+          id="name"
+          formControlName="name"
+          [ngClass]="{
+            'invalid-input': submittedForm && form.controls['name'].errors
+          }"
+        ></textarea>
+      </div>
+    </div>
+    <hr class="text-gray-300 w-full my-5" />
+    <app-title-header
+      class="margin-x-0"
+      titleHTML="<h4 class='text-18 lg:text-18 font-bold text-gray-900'>Bank Account Details</h4>"
+      desc="Enter the bank account details of the recepient"
+    ></app-title-header>
+    <hr class="text-gray-300 w-full my-5" />
+    <div class="flex-col gap-0 lg:flex lg:flex-row lg:gap-20">
+      <div class="w-full lg:w-2/6">
+        <label class="font-medium" for="email">Recepient's Email Address</label>
+      </div>
+      <div class="w-full flex align-top mt-4 lg:w-4/6 lg:mt-0">
+        <input
+          id="email"
+          name="email"
+          class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          type="email"
+          formControlName="email"
+          placeholder="Enter email"
+          [ngClass]="{
+            'invalid-input': submittedForm && form.controls['email'].errors
+          }"
+        />
+      </div>
+    </div>
+    <hr class="text-gray-300 w-full my-5" />
+    <!-- <div class="flex-col gap-0 lg:flex lg:flex-row lg:gap-20">
+      <div class="w-full lg:w-2/6">
+        <label class="font-medium" for="shareableId"
+          >Recepient's Bank Account Number</label
+        >
+      </div>
+      <div class="w-full flex align-top mt-4 lg:w-4/6 lg:mt-0">
+        <input
+          id="shareableId"
+          name="shareableId"
+          class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          type="text"
+          formControlName="shareableId"
+          placeholder="Enter account number"
+          [ngClass]="{
+            'invalid-input':
+              submittedForm && form.controls['shareableId'].errors
+          }"
+        />
+      </div>
+    </div>
+    <hr class="text-gray-300 w-full my-5" /> -->
+    <div class="flex-col gap-0 lg:flex lg:flex-row lg:gap-20">
+      <div class="w-full lg:w-2/6">
+        <label class="font-medium" for="amount">Amount</label>
+      </div>
+      <div class="w-full flex align-top mt-4 lg:w-4/6 lg:mt-0">
+        <input
+          name="amount"
+          id="amount"
+          class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          formControlName="amount"
+          type="number"
+          min="1"
+          step="any"
+          placeholder="Enter amount"
+          [ngClass]="{
+            'invalid-input':
+              submittedForm && form.controls['amount'].errors
+          }"
+        />
+      </div>
+    </div>
+    <hr class="text-gray-300 w-full my-5" />
+    <button
+      type="submit"
+      class="bg-blue-600 text-white block w-full rounded-lg py-1 my-7 outline-none"
+    >
+      Transfer Funds
+    </button>
+  </form>
 </div>

@@ -294,6 +294,33 @@ app.post('/api/dwolla-token', async (req, res) => {
   }
 });
 
+app.post('/api/create-transfer', async (req, res) => {
+  const { sourceFundingSourceUrl, destinationFundingSourceUrl, amount } = req.body;
+
+  try {
+    const requestBody = {
+      _links: {
+        source: {
+          href: sourceFundingSourceUrl,
+        },
+        destination: {
+          href: destinationFundingSourceUrl,
+        },
+      },
+      amount: {
+        currency: 'USD',
+        value: amount,
+      },
+    };
+    const response = await dwollaClient.post("transfers", requestBody);
+    const responseLocation = response.headers.get('location');
+    res.status(200).json({data: responseLocation});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
+
 app.post('/api/dwolla-customer', async (req, res) => {
   try {
     const { access_token, user } = req.body;

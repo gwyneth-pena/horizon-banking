@@ -65,7 +65,7 @@ export class AppWriteService {
 
   async getCurrentUser() {
     try {
-      let user = await this.account.get();
+      let user:any = await this.account.get();
       if(user){
         const userAddl = await this.getDocument(
           environment.appwriteDatabaseId,

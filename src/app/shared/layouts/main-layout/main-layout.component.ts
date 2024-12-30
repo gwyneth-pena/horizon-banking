@@ -7,8 +7,10 @@ import { CommonModule } from '@angular/common';
   selector: 'app-main-layout',
   imports: [SidebarComponent, RouterOutlet, CommonModule],
   templateUrl: './main-layout.component.html',
-  styleUrl: './main-layout.component.css'
+  styleUrl: './main-layout.component.css',
 })
 export class MainLayoutComponent {
-  isOpen:boolean = false;
+  isOpen: boolean = false;
+  screenWidth = window.innerWidth;
+
 }

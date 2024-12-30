@@ -1,0 +1,15 @@
+<div class="w-full">
+  <select
+    [id]="id()"
+    [name]="name()"
+    class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    [ngClass]="{'invalid-input': isInvalidInput()}"
+    [(ngModel)]="value"
+    (change)="onChange(value)"
+    (blur)="onTouched()"
+  >
+    @for(bank of banks(); ; track bank.id){
+        <option [ngValue]="bank">{{bank.name}}</option>
+    }
+  </select>
+</div>

@@ -14,10 +14,18 @@ export class DwollaService {
     return this.http.post('/api/dwolla-token', {});
   }
 
-  postCustomer(user:any, access_token:string) {
+  postCustomer(user: any, access_token: string) {
     return this.http.post('/api/dwolla-customer', {
       user: user,
       access_token: access_token,
     });
+  }
+
+  createTransfer(params: {
+    sourceFundingSourceUrl: string;
+    destinationFundingSourceUrl: string;
+    amount: number;
+  }) {
+    return this.http.post('/api/create-transfer', params);
   }
 }

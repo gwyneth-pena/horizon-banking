@@ -35,10 +35,10 @@ export class HomeComponent implements OnInit {
   user: any = signal<any>(undefined);
   appWriteService = inject(AppWriteService);
   plaidService = inject(PlaidService);
-  banks: any = signal<any>([]);
+  banks: any = signal<any>(undefined);
   activeBank: any = signal<any>({});
   banksTotalBalance = computed(async () => {
-    const banks = this.banks();
+    const banks = this.banks() || [];
     const total = await banks.reduce(
       (acc: number, curr: any) => acc + curr.availableBalance,
       0
@@ -134,7 +134,7 @@ export class HomeComponent implements OnInit {
   async setActiveBank(bank: any) {
     bank.active = true;
     this.activeBank.set(bank);
-    let banks = this.banks();
+    let banks = this.banks() || [];
     banks = await banks.map((bankItem: any) => {
       const activeBank = this.activeBank();
       if (bankItem.id !== activeBank.id) {
