@@ -1,5 +1,5 @@
 <div class="flex-col md:flex md:flex-row">
-  <div class="w-full flex flex-col gap-1 md:w-4/6">
+  <div class="w-full flex flex-col gap-1 px-0 md:w-4/6 md:px-4">
     <app-title-header
       titleHTML="<h2 class='text-24 lg:text-30 font-bold text-gray-900'>Welcome, <span class='text-blue-500'>{{
         user()?.firstName
@@ -80,6 +80,7 @@
               {{ activeBank()?.type | titlecase }}
             </div>
           </div>
+          <app-transaction-table [transactions]="transactions()|async"></app-transaction-table>
         </div>
         <div *ngIf="banks().length == 0">
           <p>No transaction/s found.</p>

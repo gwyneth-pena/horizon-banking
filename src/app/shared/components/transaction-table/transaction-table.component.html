@@ -1,0 +1,64 @@
+<div class="overflow-x-auto">
+  <table class="min-w-full table-auto">
+    <thead>
+      <tr class="bg-gray-100 py-4">
+        <th class="px-4 py-2 text-gray-500 text-left">Transaction</th>
+        <th class="px-4 py-2 text-gray-500 text-left">Amount</th>
+        <th class="px-4 py-2 text-gray-500 text-left">Status</th>
+        <th class="px-4 py-2 text-gray-500 text-left">Date</th>
+        <th class="px-4 py-2 text-gray-500 text-left">Category</th>
+      </tr>
+    </thead>
+    <tbody>
+      @if(transactions().length>0){ @for(transaction of transactions(); track
+      transactions.$id||transactions.id){
+      <tr
+        class="border-t py-4"
+      >
+        <td
+          class="px-4 py-2"
+          class="flex-row flex align-middle items-center text-gray-500"
+        >
+          <span
+            ><img
+              *ngIf="transaction.image"
+              [src]="transaction.image"
+              class="mx-3 rounded-full w-8"
+              alt="Transaction Image"
+            />
+            <div
+              *ngIf="!transaction.image"
+              class="bg-gray-600 mx-3 w-8 rounded-full h-8"
+            ></div> </span
+          >{{ transaction.name | removeUnwantedChars }}
+        </td>
+        <td
+          class="px-4 py-2 font-semibold"
+          [ngClass]="{
+            'text-red-600': transaction.amount < 0,
+            'text-success-600': transaction.amount > 0,
+            'text-gray-600': transaction.amount  == 0
+          }"
+        >
+          ${{ transaction.amount | padTwoDecimal }}
+        </td>
+        <td class="px-4 py-2 text-gray-500">
+          {{ transaction.pending ? "Pending" : "Success" }}
+        </td>
+        <td class="px-4 py-2 text-gray-500">
+          {{ transaction.date | date : "yyyy-MM-dd" }}
+        </td>
+        <td class="px-4 py-2 text-gray-500">
+          {{ transaction.category | titlecase }}
+        </td>
+      </tr>
+      } } @else{
+      <tr class="border-t py-4">
+        <td class="px-4 py-2 text-center text-gray-500" colspan="6">
+          No data found.
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

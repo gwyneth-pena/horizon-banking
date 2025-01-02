@@ -181,7 +181,7 @@ app.post('/api/create-plaid-link-token', async (req, res) => {
         client_user_id: $id,
       },
       client_name: `${name}`,
-      products: ['auth'] as Products[],
+      products: ['transactions','auth','identity'] as Products[],
       language: 'en',
       country_codes: ['US'] as CountryCode[],
     };
@@ -245,7 +245,7 @@ app.post('/api/exchange-public-token', async (req, res) => {
 
 app.get('/api/accounts', async (req, res) => {
   try {
-    const token:any = req.query['bankToken'] || '';
+    const token: any = req.query['bankToken'] || '';
     const accountsResponse = await plaidClient.accountsGet({
       access_token: token,
     });
@@ -267,6 +267,40 @@ app.get('/api/accounts', async (req, res) => {
       subtype: accountData.subtype! as string,
     };
     res.status(200).json({ account });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
+
+app.get('/api/transactions', async (req, res) => {
+  try {
+    const token: any = req.query['bankToken'] || '';
+    const response = await plaidClient.transactionsSync({
+      access_token: token,
+    });
+    let hasMore = true;
+    let transactions: any = [];
+
+    const data = response.data;
+
+    transactions = response.data.added.map((transaction) => ({
+      id: transaction.transaction_id,
+      name: transaction.name,
+      paymentChannel: transaction.payment_channel,
+      type: transaction.payment_channel,
+      accountId: transaction.account_id,
+      amount: transaction.amount,
+      pending: transaction.pending,
+      category: transaction.category ? transaction.category[0] : '',
+      date: transaction.date,
+      image: transaction.logo_url,
+      hasMore: data.has_more
+    }));
+
+    hasMore = data.has_more;
+
+    res.status(200).json({ transactions});
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Something went wrong.' });
@@ -295,7 +329,8 @@ app.post('/api/dwolla-token', async (req, res) => {
 });
 
 app.post('/api/create-transfer', async (req, res) => {
-  const { sourceFundingSourceUrl, destinationFundingSourceUrl, amount } = req.body;
+  const { sourceFundingSourceUrl, destinationFundingSourceUrl, amount } =
+    req.body;
 
   try {
     const requestBody = {
@@ -312,9 +347,9 @@ app.post('/api/create-transfer', async (req, res) => {
         value: amount,
       },
     };
-    const response = await dwollaClient.post("transfers", requestBody);
+    const response = await dwollaClient.post('transfers', requestBody);
     const responseLocation = response.headers.get('location');
-    res.status(200).json({data: responseLocation});
+    res.status(200).json({ data: responseLocation });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Something went wrong.' });

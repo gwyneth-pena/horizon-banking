@@ -15,6 +15,7 @@ import { Query } from 'appwrite';
 import { lastValueFrom, of } from 'rxjs';
 import { DwollaService } from '../../shared/services/dwolla.service';
 import { AlertComponent } from '../../shared/components/alert/alert.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-payment-transfer',
@@ -39,13 +40,18 @@ export class PaymentTransferComponent {
     message: '',
     type: '',
   };
-
+  titleService = inject(Title);
   form: any = this.formBuilder.group({
     senderBank: [null, Validators.required],
     name: [''],
     email: ['', [Validators.required, Validators.email]],
     amount: ['', Validators.required],
   });
+
+
+  constructor(){
+    this.titleService.setTitle('Payment Transfer | Horizon');
+  }
   
 
   async submit() {
@@ -123,6 +129,7 @@ export class PaymentTransferComponent {
           email: this.form.value.email,
           channel: 'online',
           category: 'Transfer',
+          date: new Date()
         };
         const transactionColId = environment.appwriteTransactionsColId;
         const transactionCreated = await this.appWriteService.createDocument(
