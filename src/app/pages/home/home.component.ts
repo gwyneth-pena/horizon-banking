@@ -18,6 +18,7 @@ import { PlaidService } from '../../shared/services/plaid.service';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { TransactionTableComponent } from '../../shared/components/transaction-table/transaction-table.component';
+import { RightSideBarComponent } from '../../shared/components/right-side-bar/right-side-bar.component';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +26,7 @@ import { TransactionTableComponent } from '../../shared/components/transaction-t
     TitleHeaderComponent,
     PlaidLinkComponent,
     TransactionTableComponent,
+    RightSideBarComponent,
     NgxPlaidLinkModule,
     CommonModule,
   ],

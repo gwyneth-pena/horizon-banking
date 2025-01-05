@@ -1,0 +1,26 @@
+<div [ngClass]="cn('gap-[18px] flex p-4 rounded-xl', categoryStyle?.bg)">
+  <figure
+    [ngClass]="cn('flex-center size-10 rounded-full', categoryStyle?.circleBg)"
+  >
+    <img
+      [src]="categoryStyle?.icon || '/icons/shopping-bag.svg'"
+      width="{20}"
+      height="{20}"
+      [alt]="category()?.name"
+    />
+  </figure>
+  <div class="flex w-full flex-1 flex-col gap-2">
+    <div class="text-14 flex justify-between">
+      <h2 [ngClass]="cn('font-medium', categoryStyle?.main)">
+        {{ category()?.name }}
+      </h2>
+      <h3 [ngClass]="cn('font-normal', category()?.count)">
+        {{ category()?.count }}
+      </h3>
+    </div>
+    <app-progress-bar
+      [percentage]="percentage()"
+      [bgColor]="categoryStyle?.progress?.indicator"
+    ></app-progress-bar>
+  </div>
+</div>

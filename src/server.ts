@@ -33,10 +33,13 @@ const plaidConfiguration = new Configuration({
   },
 });
 
+
 const plaidClient = new PlaidApi(plaidConfiguration);
+const cors = require('cors');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+app.use(cors());
 app.use(bodyParser.json());
 
 /**

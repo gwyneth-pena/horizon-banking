@@ -10,11 +10,9 @@
       </tr>
     </thead>
     <tbody>
-      @if(transactions().length>0){ @for(transaction of transactions(); track
-      transactions.$id||transactions.id){
-      <tr
-        class="border-t py-4"
-      >
+      @if(transactions()?.length>0){ @for(transaction of transactions(); 
+      track $index){
+      <tr class="border-t py-4">
         <td
           class="px-4 py-2"
           class="flex-row flex align-middle items-center text-gray-500"
@@ -30,20 +28,26 @@
               *ngIf="!transaction.image"
               class="bg-gray-600 mx-3 w-8 rounded-full h-8"
             ></div> </span
-          >{{ transaction.name | removeUnwantedChars }}
+          ><span>{{ transaction.name | removeUnwantedChars }}</span>
         </td>
         <td
           class="px-4 py-2 font-semibold"
           [ngClass]="{
             'text-red-600': transaction.amount < 0,
             'text-success-600': transaction.amount > 0,
-            'text-gray-600': transaction.amount  == 0
+            'text-gray-600': transaction.amount == 0
           }"
         >
           ${{ transaction.amount | padTwoDecimal }}
         </td>
-        <td class="px-4 py-2 text-gray-500">
-          {{ transaction.pending ? "Pending" : "Success" }}
+        <td
+          class="px-4 py-2 text-gray-500 flex justify-center align-middle items-center"
+          [ngClass]="!transaction.pending ? 'success-pill' : 'danger-pill'"
+        >
+          <span
+            [ngClass]="!transaction.pending ? 'success-pill' : 'danger-pill'"
+            >{{ transaction.pending ? "Pending" : "Success" }}</span
+          >
         </td>
         <td class="px-4 py-2 text-gray-500">
           {{ transaction.date | date : "yyyy-MM-dd" }}

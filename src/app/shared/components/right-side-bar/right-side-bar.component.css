@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@layer utilities {
+  .text-16 {
+    @apply text-[16px] leading-[24px];
+  }
+  .text-24 {
+    @apply text-[24px] leading-[30px];
+  }
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .right-sidebar {
+    @apply no-scrollbar hidden h-full max-h-full flex-col border-l border-gray-200 xl:flex w-[355px] xl:overflow-y-scroll !important;
+  }
+
+  .profile-banner {
+    @apply h-[120px] w-full bg-gradient-mesh bg-cover bg-no-repeat !important;
+  }
+
+  .profile {
+    @apply relative flex px-6 max-xl:justify-center !important;
+  }
+
+  .profile-img {
+    @apply flex-center absolute -top-8 size-24 rounded-full bg-gray-100 border-8 border-white p-2 shadow-profile;
+  }
+
+  .profile-details {
+    @apply flex flex-col pt-24;
+  }
+
+  .profile-name {
+    @apply text-24 font-semibold text-gray-900;
+  }
+
+  .profile-email {
+    @apply text-16 font-normal text-gray-600;
+  }
+
+  .banks {
+    @apply flex flex-col justify-between gap-8 px-6 py-8;
+  }
+}

@@ -10,10 +10,10 @@
   <i (click)="isOpen=!isOpen"><img class="menu-icon" src="/icons/hamburger.svg" /></i>
 </div>
 <div class="flex-col lg:flex lg:flex-row">
-  <div class="w-full hidden md:w-1/6 lg:flex sidebar" [ngClass]="{'hidden': !isOpen}">
+  <div class="w-full hidden lg:w-1/6 lg:flex sidebar" [ngClass]="{'hidden': !isOpen}">
     <app-sidebar (close)="screenWidth <= 768 ? isOpen=false : null"></app-sidebar>
   </div>
-  <div class="px-3 py-5 w-full md:px-10 md:py-8 md:w-5/6">
+  <div class="px-3 py-5 w-full lg:ml-40 lg:py-8 lg:w-5/6">
     <router-outlet></router-outlet>
   </div>
 </div>

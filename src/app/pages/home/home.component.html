@@ -1,5 +1,5 @@
-<div class="flex-col md:flex md:flex-row">
-  <div class="w-full flex flex-col gap-1 px-0 md:w-4/6 md:px-4">
+<div class="flex-col lg:flex lg:flex-row">
+  <div class="w-full flex flex-col px-0 lg:gap-1 lg:w-4/6 lg:px-4">
     <app-title-header
       titleHTML="<h2 class='text-24 lg:text-30 font-bold text-gray-900'>Welcome, <span class='text-blue-500'>{{
         user()?.firstName
@@ -36,9 +36,11 @@
     </div>
 
     <div class="my-5">
-      <h2 class="text-24 lg:text-25 font-bold text-gray-900 mb-3">
-        Recent Transactions
-      </h2>
+      <div class="flex justify-between align-middle">
+        <h2 class="text-24 lg:text-25 font-bold text-gray-900 mb-3">
+          Recent Transactions
+        </h2>
+      </div>
       <ng-container *ngIf="banks(); else loading">
         <div *ngIf="banks().length > 0">
           <div class="flex">
@@ -80,7 +82,9 @@
               {{ activeBank()?.type | titlecase }}
             </div>
           </div>
-          <app-transaction-table [transactions]="transactions()|async"></app-transaction-table>
+          <app-transaction-table
+            [transactions]="transactions() | async"
+          ></app-transaction-table>
         </div>
         <div *ngIf="banks().length == 0">
           <p>No transaction/s found.</p>
@@ -91,7 +95,12 @@
       </ng-template>
     </div>
   </div>
-  <div class="w-full md:w-2/6 py-5">
-    <p>weqwew</p>
+  <div class="hidden w-full lg:block lg:w-2/6 py-5">
+    <app-right-side-bar
+      (bankAdded)="getBanks()"
+      [user]="user()"
+      [banks]="banks()"
+      [transactions]="transactions() | async"
+    ></app-right-side-bar>
   </div>
 </div>

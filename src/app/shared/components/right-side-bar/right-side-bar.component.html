@@ -1,0 +1,64 @@
+<aside class="right-sidebar">
+  <section class="flex flex-col pb-8">
+    <div class="profile-banner"></div>
+    <div class="profile">
+      <div class="profile-img">
+        <span class="text-5xl font-bold text-blue-500">{{
+          user()?.firstName[0]
+        }}</span>
+      </div>
+
+      <div class="profile-details">
+        <h1 class="text-24 lg:text-39 font-bold text-gray-900 mb-3">
+          {{ user()?.firstName }} {{ user()?.lastName }}
+        </h1>
+        <p class="text-gray-400">
+          {{ user()?.email }}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="banks">
+    <div class="flex w-full justify-between">
+      <h2 class="header-2">My Banks</h2>
+      <app-plaid-link
+        [user]="user()"
+        (bankAdded)="bankAdded.emit()"
+      ></app-plaid-link>
+    </div>
+
+    @if(banks()){ @if(banks().length>0){
+    <div
+      class="relative flex flex-1 flex-col items-center justify-center gap-5"
+    >
+      <div class="relative z-10">
+        <app-bank-card
+          [account]="banks()[0]"
+          [username]="user()?.firstName + ' ' + user()?.lastName"
+          [showBalance]="false"
+        />
+      </div>
+      @if(banks()[1]){
+      <div class="absolute right-0 top-8 z-0 w-[90%]">
+        <app-bank-card
+          [account]="banks()[1]"
+          [username]="user()?.firstName + ' ' + user()?.lastName"
+          [showBalance]="false"
+        />
+      </div>
+      }
+    </div>
+    } }
+
+    <div class="mt-10 flex flex-col gap-6 h-full">
+      <h2 class="header-2">Top categories</h2>
+
+      <div class="space-y-100">
+        @for(category of categories(); track $index){
+          <app-category [category]="category" [totalCategories]="categoriesCount()"></app-category>
+        }
+      </div>
+    </div>
+  </section>
+</aside>

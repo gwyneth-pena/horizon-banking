@@ -6,7 +6,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class PadTwoDecimalPipe implements PipeTransform {
 
   transform(value: number, ...args: unknown[]): unknown {
-    return value.toFixed(2);
+    if(value) return value.toFixed(2);
+    return '';
   }
 
 }

@@ -57,6 +57,14 @@
     @apply focus:ring-0 focus-visible:ring-transparent focus:ring-offset-0 focus-visible:ring-offset-0 focus-visible:outline-none focus-visible:border-none !important;
   }
 
+  .success-pill{
+    @apply bg-green-100 text-green-600 px-4 py-1 rounded-full text-sm
+  }
+
+  .danger-pill{
+    @apply bg-red-100 text-red-600 px-4 py-1 rounded-full text-sm
+  }
+
   .text14_padding10 {
     @apply text-14 px-4 py-2.5 font-semibold;
   }
