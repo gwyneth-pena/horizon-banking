@@ -1,0 +1,24 @@
+<div>
+  <app-title-header
+    titleHTML="<h2 class='text-24 lg:text-30 font-bold text-gray-900'>My Banks</h2>"
+    desc="Effortlessly manage your banking activities"
+  ></app-title-header>
+
+  <div class="ml-2 my-20">
+    <p class="font-bold text-md">Your Cards</p>
+
+    <div class="mt-10 flex flex-wrap gap-6">
+      @if(!banks()){
+      <p class="text-blue-500">Loading ...</p>
+      } @else if (banks().length==0) {
+      <p>No bank/s found.</p>
+      } @else if (banks().length>0) {
+      <app-bank-card
+        [account]="banks()[0]"
+        [username]="user()?.firstName + ' ' + user()?.lastName"
+        [showBalance]="false"
+      />
+      }
+    </div>
+  </div>
+</div>

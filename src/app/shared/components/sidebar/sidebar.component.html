@@ -1,5 +1,5 @@
 <div
-  class="flex flex-col sidebar-border h-screen left-0 top-0 px-6 pt-5 pb-4 fixed bg-white lg:pt-8"
+  class="flex flex-col z-40 sidebar-border h-screen left-0 top-0 px-6 pt-5 pb-4 fixed bg-white lg:pt-8"
 >
   <a class="flex items-center mb-5 cursor-pointer" routerLink="/">
     <img src="/icons/logo.svg" alt="Logo" class="size-15px lg:size-32px mr-3" />
@@ -36,7 +36,7 @@
         <p class="font-bold text-gray-700">{{ user?.name }}</p>
         <p class="text-gray-600">{{ user?.email }}</p>
       </div>
-      <i class="my-auto"><img src="/icons/logout.svg" /></i>
+      <i class="mt-2 ml-auto"><img src="/icons/logout.svg" /></i>
     </div>
   </nav>
 </div>

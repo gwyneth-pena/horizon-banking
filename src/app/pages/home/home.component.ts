@@ -19,6 +19,8 @@ import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { TransactionTableComponent } from '../../shared/components/transaction-table/transaction-table.component';
 import { RightSideBarComponent } from '../../shared/components/right-side-bar/right-side-bar.component';
+import topCategoryStyles from '../../shared/components/category/category.component';
+import { UtilsService } from '../../shared/services/utils.service';
 
 @Component({
   selector: 'app-home',
@@ -39,6 +41,7 @@ export class HomeComponent implements OnInit {
   bankColId = environment.apperiteBanksColId;
   transactionColId = environment.appwriteTransactionsColId;
   titleService = inject(Title);
+  utilsService = inject(UtilsService);
   user: any = signal<any>(undefined);
   appWriteService = inject(AppWriteService);
   plaidService = inject(PlaidService);
@@ -86,10 +89,17 @@ export class HomeComponent implements OnInit {
     return [
       ...(await transactionsFromAppWrite),
       ...(await transactionFromPlaid?.transactions),
-    ].sort(
-      (a: any, b: any) =>
-        new Date(b?.date).getTime() - new Date(a?.date).getTime()
-    );
+    ]
+      .map((transaction: any) => {
+        const categoryStyles =
+          topCategoryStyles[transaction.category] || topCategoryStyles.default;
+        return { ...transaction, categoryStyles };
+      })
+      .sort(
+        (a: any, b: any) =>
+          new Date(b?.date).getTime() - new Date(a?.date).getTime()
+      )
+      ?.slice(0, 5);
   });
 
   constructor() {
@@ -130,39 +140,12 @@ export class HomeComponent implements OnInit {
   }
 
   async getBanks() {
-    let banks: any = await lastValueFrom(
-      of(
-        this.appWriteService.getDocument(this.dbId, this.bankColId, [
-          Query.equal('userId', this.user()?.$id),
-        ])
-      )
+
+    const banks = await this.utilsService.getBanks(
+      this.user()?.$id,
+      this.dbId,
+      this.bankColId
     );
-    banks = banks?.documents || [];
-    banks = Promise.all(
-      banks.map(async (bank: any, i: number) => {
-        bank.active = false;
-        if (i == 0) {
-          bank.active = true;
-        }
-
-        const accountResponse: any = await lastValueFrom(
-          this.plaidService.getAccount(bank.accessToken)
-        );
-
-        const nameAbbrev = await accountResponse?.account?.name
-          ?.split(' ')
-          .map((i: any) => i[0].toUpperCase())
-          .splice(0, 2)
-          .join('');
-
-        return {
-          ...bank,
-          ...(await accountResponse?.account),
-          nameAbbrev: await nameAbbrev,
-        };
-      })
-    );
-
     const banksPromise = await banks;
     if ((await banksPromise?.length) > 0) {
       await this.setActiveBank(banksPromise[0]);

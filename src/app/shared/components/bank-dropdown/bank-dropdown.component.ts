@@ -8,11 +8,9 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { AppWriteService } from '../../services/app-write.service';
-import { lastValueFrom, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { Query } from 'appwrite';
-import { PlaidService } from '../../services/plaid.service';
+import { UtilsService } from '../../services/utils.service';
+import { AppWriteService } from '../../services/app-write.service';
 
 @Component({
   selector: 'app-bank-dropdown',
@@ -37,7 +35,7 @@ export class BankDropdownComponent {
   user = signal<any>(undefined);
   dbId = environment.appwriteDatabaseId;
   bankColId = environment.apperiteBanksColId;
-  plaidService = inject(PlaidService);
+  utilsService = inject(UtilsService);
 
   constructor() {
     effect(() => {
@@ -65,36 +63,11 @@ export class BankDropdownComponent {
   }
 
   async getBanks() {
-    let banks: any = await lastValueFrom(
-      of(
-        this.appWriteService.getDocument(this.dbId, this.bankColId, [
-          Query.equal('userId', this.user()?.$id),
-        ])
-      )
+    const banks = await this.utilsService.getBanks(
+      this.user()?.$id,
+      this.dbId,
+      this.bankColId
     );
-    banks = banks?.documents || [];
-    banks = Promise.all(
-      banks.map(async (bank: any, i: number) => {
-        const accountResponse: any = await lastValueFrom(
-          this.plaidService.getAccount(bank.accessToken)
-        );
-
-        const nameAbbrev = await accountResponse?.account?.name
-          ?.split(' ')
-          .map((i: any) => i[0].toUpperCase())
-          .splice(0, 2)
-          .join('');
-
-        return {
-          ...bank,
-          ...(await accountResponse?.account),
-          nameAbbrev: await nameAbbrev,
-        };
-      })
-    );
-
-    const banksPromise = await banks;
-
-    this.banks.set(await banksPromise);
+    this.banks.set(await banks);
   }
 }

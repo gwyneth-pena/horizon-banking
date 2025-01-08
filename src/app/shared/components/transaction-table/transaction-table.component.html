@@ -10,8 +10,8 @@
       </tr>
     </thead>
     <tbody>
-      @if(transactions()?.length>0){ @for(transaction of transactions(); 
-      track $index){
+      @if(transactions()?.length>0){ @for(transaction of transactions(); track
+      $index){
       <tr class="border-t py-4">
         <td
           class="px-4 py-2"
@@ -26,8 +26,10 @@
             />
             <div
               *ngIf="!transaction.image"
-              class="bg-gray-600 mx-3 w-8 rounded-full h-8"
-            ></div> </span
+              class="bg-gray-600 mx-3 w-8 rounded-full h-8 flex justify-center align-middle text-white font-semibold items-center"
+            >
+              {{ transaction.name?.[0]}}
+            </div> </span
           ><span>{{ transaction.name | removeUnwantedChars }}</span>
         </td>
         <td
@@ -41,7 +43,7 @@
           ${{ transaction.amount | padTwoDecimal }}
         </td>
         <td
-          class="px-4 py-2 text-gray-500 flex justify-center align-middle items-center"
+          class="px-1 py-1 text-xs font-semibold text-gray-500 flex justify-center align-middle items-center"
           [ngClass]="!transaction.pending ? 'success-pill' : 'danger-pill'"
         >
           <span
@@ -53,7 +55,12 @@
           {{ transaction.date | date : "yyyy-MM-dd" }}
         </td>
         <td class="px-4 py-2 text-gray-500">
-          {{ transaction.category | titlecase }}
+          <p
+            [ngClass]="transaction?.categoryStyles?.border"
+            class="px-1 py-1 text-xs font-semibold rounded-full flex justify-center align-middle items-center"
+          >
+            {{ transaction.category | titlecase }}
+          </p>
         </td>
       </tr>
       } } @else{

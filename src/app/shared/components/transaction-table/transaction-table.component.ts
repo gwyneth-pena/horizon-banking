@@ -7,8 +7,8 @@ import { RemoveUnwantedCharsPipe } from '../../pipes/remove-unwanted-chars.pipe'
   selector: 'app-transaction-table',
   imports: [CommonModule, PadTwoDecimalPipe, RemoveUnwantedCharsPipe],
   templateUrl: './transaction-table.component.html',
-  styleUrl: './transaction-table.component.css'
+  styleUrl: './transaction-table.component.css',
 })
 export class TransactionTableComponent {
-  transactions:any = input([]);
+  transactions: any = input([]);
 }
