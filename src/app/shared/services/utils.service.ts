@@ -3,6 +3,7 @@ import { AppWriteService } from './app-write.service';
 import { lastValueFrom, of } from 'rxjs';
 import { PlaidService } from './plaid.service';
 import { Query } from 'appwrite';
+import topCategoryStyles from '../components/category/category.component';
 
 @Injectable({
   providedIn: 'root',
@@ -48,5 +49,43 @@ export class UtilsService {
 
     const banksPromise = await banks;
     return await banksPromise;
+  }
+
+  async getTransactions(
+    userId: string,
+    accessToken: string,
+    dbId: string,
+    transactionColId: string
+  ) {
+    const transactionFromPlaid: any = await lastValueFrom(
+      this.plaidService.getTransactions(accessToken)
+    );
+    if (!(await transactionFromPlaid?.transactions)) return [];
+    let transactionsFromAppWrite: any = await lastValueFrom(
+      of(
+        this.appWriteService.getDocument(dbId, transactionColId, [
+          Query.or([
+            Query.equal('receiverId', userId),
+            Query.equal('senderId', userId),
+          ]),
+        ])
+      )
+    );
+    transactionsFromAppWrite =
+      (await transactionsFromAppWrite?.documents) || [];
+
+    return [
+      ...(await transactionsFromAppWrite),
+      ...(await transactionFromPlaid?.transactions),
+    ]
+      .map((transaction: any) => {
+        const categoryStyles =
+          topCategoryStyles[transaction.category] || topCategoryStyles.default;
+        return { ...transaction, categoryStyles };
+      })
+      .sort(
+        (a: any, b: any) =>
+          new Date(b?.date).getTime() - new Date(a?.date).getTime()
+      );
   }
 }

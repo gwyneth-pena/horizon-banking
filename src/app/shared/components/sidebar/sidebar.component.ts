@@ -31,12 +31,6 @@ export class SidebarComponent {
       isActive: false,
     },
     {
-      name: 'Transaction History',
-      url: '/transaction-history',
-      imgSrc: '/icons/transaction.svg',
-      isActive: false,
-    },
-    {
       name: 'Payment Transfer',
       url: '/payment-transfer',
       imgSrc: '/icons/money-send.svg',

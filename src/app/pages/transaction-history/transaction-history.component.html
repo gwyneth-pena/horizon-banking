@@ -1,0 +1,32 @@
+<div>
+  <app-title-header
+    titleHTML="<h2 class='text-24 lg:text-30 font-bold text-gray-900'>Transaction History</h2>"
+    desc="See your bank details and transactions"
+  ></app-title-header>
+  <div class="ml-2 my-4">
+    <div class="transactions-account mt-10">
+      <div class="flex flex-col gap-2">
+        <h2 class="text-18 font-bold text-white">{{ bank()?.name }}</h2>
+        <p class="text-14 text-blue-25">{{ bank()?.officialName }}</p>
+        <p class="text-14 font-semibold tracking-[1.1px] text-white">
+          ●●●● ●●●● ●●●● {{ bank()?.mask }}
+        </p>
+      </div>
+
+      <div class="transactions-account-balance">
+        <p class="text-14">Current balance</p>
+        <p class="text-24 text-center font-bold">
+          ${{ bank()?.currentBalance | padTwoDecimal }}
+        </p>
+      </div>
+    </div>
+    <section class="flex w-full flex-col gap-6 mt-10">
+      <p class="font-bold text-md">Transaction History</p>
+
+      <app-transaction-table [transactions]="currentTransactions()" />
+      @if(totalPages>1){
+      <app-pagination (newCurrentPage)="newCurrentPage.set($event)" [totalPages]="totalPages" [page]="currentPage" />
+      }
+    </section>
+  </div>
+</div>

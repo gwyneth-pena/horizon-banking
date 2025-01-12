@@ -1,0 +1,30 @@
+<div class="flex justify-between flex-row w-full">
+  <button
+    id="prev-btn"
+    [disabled]="currentPage() < 1"
+    (click)="handleClick(currentPage() - 1)"
+    class="flex font-bold text-gray-500 align-middle justify-center items-center"
+  >
+    <img src="/icons/arrow-left.svg" alt="arrow" width="20px" height="20" />Prev
+  </button>
+  <div class="flex">
+    @for (page of pages(); track $index) {
+    <button
+      (click)="handleClick(page)"
+      class="text-14 flex items-center px-2"
+      [ngClass]="{ 'font-bold': page == this.currentPage() }"
+    >
+      {{ page }}
+    </button>
+    }
+  </div>
+  <button
+    id="next-btn"
+    [disabled]="currentPage() > this.totalPages() - 1"
+    (click)="handleClick(currentPage() + 1)"
+    class="flex font-bold text-gray-500 align-middle justify-center items-center"
+  >
+    Next
+    <img src="/icons/arrow-right.svg" alt="arrow" width="20px" height="20px" />
+  </button>
+</div>

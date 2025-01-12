@@ -1,6 +1,7 @@
 <div class="flex flex-col">
   <a
-    [routerLink]="'/transaction-history/?id=' + account()?.id"
+    routerLink="/transaction-history"
+    [queryParams]="{'id':account()?.id}"
     class="bank-card"
   >
     <div class="bank-card_content">

@@ -69,37 +69,13 @@ export class HomeComponent implements OnInit {
   transactions = computed(async () => {
     const activeBank = await this.activeBank();
     if (!(await activeBank?.accessToken) || !(await activeBank)) return [];
-    const transactionFromPlaid: any = await lastValueFrom(
-      this.plaidService.getTransactions(await activeBank?.accessToken)
+    const transactions = await this.utilsService.getTransactions(
+      this.user()?.$id,
+      await activeBank.accessToken,
+      this.dbId,
+      this.transactionColId
     );
-    if (!(await transactionFromPlaid?.transactions)) return [];
-    let transactionsFromAppWrite: any = await lastValueFrom(
-      of(
-        this.appWriteService.getDocument(this.dbId, this.transactionColId, [
-          Query.or([
-            Query.equal('receiverId', this.user()?.$id),
-            Query.equal('senderId', this.user()?.$id),
-          ]),
-        ])
-      )
-    );
-    transactionsFromAppWrite =
-      (await transactionsFromAppWrite?.documents) || [];
-
-    return [
-      ...(await transactionsFromAppWrite),
-      ...(await transactionFromPlaid?.transactions),
-    ]
-      .map((transaction: any) => {
-        const categoryStyles =
-          topCategoryStyles[transaction.category] || topCategoryStyles.default;
-        return { ...transaction, categoryStyles };
-      })
-      .sort(
-        (a: any, b: any) =>
-          new Date(b?.date).getTime() - new Date(a?.date).getTime()
-      )
-      ?.slice(0, 5);
+    return transactions.splice(0,5);
   });
 
   constructor() {
@@ -140,7 +116,6 @@ export class HomeComponent implements OnInit {
   }
 
   async getBanks() {
-
     const banks = await this.utilsService.getBanks(
       this.user()?.$id,
       this.dbId,
