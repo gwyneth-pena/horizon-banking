@@ -8,6 +8,7 @@ import { PlaidService } from '../../shared/services/plaid.service';
 import { PadTwoDecimalPipe } from '../../shared/pipes/pad-two-decimal.pipe';
 import { TransactionTableComponent } from '../../shared/components/transaction-table/transaction-table.component';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-transaction-history',
@@ -25,6 +26,7 @@ export class TransactionHistoryComponent implements OnInit {
   appWriteService = inject(AppWriteService);
   utilsService = inject(UtilsService);
   plaidService = inject(PlaidService);
+  titleService = inject(Title);
   bankId = signal('');
   user = signal<any>(undefined);
   bank = signal<any>(undefined);
@@ -41,6 +43,8 @@ export class TransactionHistoryComponent implements OnInit {
   newCurrentPage = signal<any>(0);
 
   constructor() {
+    this.titleService.setTitle('Transfer History | Horizon');
+
     effect(async () => {
       if (this.user() && !this.bank()) {
         const banks = await this.utilsService.getBanks(
