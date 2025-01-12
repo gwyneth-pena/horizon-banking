@@ -1,6 +1,7 @@
 # Banking
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.2.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.2. 
+This is based on this project: https://github.com/adrianhajdin/banking but using Angular 19 instead of Next.js.
 
 ## Development server
 
