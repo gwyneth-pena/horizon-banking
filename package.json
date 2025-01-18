@@ -4,14 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build-dev": "ng build",
+    "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "dev:ssr": "ng run test:serve-ssr",
-    "serve:ssr": "node dist/test/server/main.js",
-    "build:ssr": "ng build && ng run test:server",
-    "prerender": "ng run test:prerender",
-    "vercel-build": "npm run build:ssr",
+    "serve:ssr:banking": "node dist/banking/server/server.mjs",
+    "vercel-build": "ng build && npm run serve:ssr:banking"
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org org-w3 --project javascript-angular ./dist/banking && sentry-cli sourcemaps upload --org org-w3 --project javascript-angular ./dist/banking"
   },
   "private": true,
@@ -29,7 +26,6 @@
     "@sentry/angular": "^8.42.0",
     "@sentry/cli": "^2.39.1",
     "@sentry/tracing": "^7.114.0",
-    "@vercel/node": "^5.0.2",
     "appwrite": "^14.0.1",
     "chart.js": "^4.4.7",
     "clsx": "^2.1.1",
