@@ -4,6 +4,7 @@ import { AppWriteService } from '../../shared/services/app-write.service';
 import { UtilsService } from '../../shared/services/utils.service';
 import { environment } from '../../../environments/environment';
 import { BankCardComponent } from '../../shared/components/bank-card/bank-card.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-my-banks',
@@ -16,10 +17,13 @@ export class MyBanksComponent implements OnInit {
   user = signal<any>(undefined);
   appWriteService = inject(AppWriteService);
   utilsService = inject(UtilsService);
+  titleService = inject(Title);
   dbId = environment.appwriteDatabaseId;
   bankColId = environment.apperiteBanksColId;
 
   constructor() {
+    this.titleService.setTitle('My Banks | Horizon');
+
     effect(async () => {
       if (this.user() && !this.banks()) {
         this.getBanks();
