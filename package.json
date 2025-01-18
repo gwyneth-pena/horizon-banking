@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:banking": "node dist/banking/server/server.mjs",
-    "vercel-build": "ng build && npm run serve:ssr:banking"
+    "vercel-build": "ng build && npm run serve:ssr:banking",
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org org-w3 --project javascript-angular ./dist/banking && sentry-cli sourcemaps upload --org org-w3 --project javascript-angular ./dist/banking"
   },
   "private": true,
