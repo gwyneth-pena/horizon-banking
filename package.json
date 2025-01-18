@@ -25,6 +25,7 @@
     "@sentry/angular": "^8.42.0",
     "@sentry/cli": "^2.39.1",
     "@sentry/tracing": "^7.114.0",
+    "@vercel/node": "^5.0.2",
     "appwrite": "^14.0.1",
     "chart.js": "^4.4.7",
     "clsx": "^2.1.1",

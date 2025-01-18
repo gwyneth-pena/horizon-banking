@@ -37,6 +37,7 @@ const plaidConfiguration = new Configuration({
 const plaidClient = new PlaidApi(plaidConfiguration);
 const cors = require('cors');
 
+
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 app.use(cors());
@@ -76,7 +77,7 @@ const dwollaClient = new Client({
 });
 
 // Create a Dwolla Funding Source using a Plaid Processor Token
-export const createFundingSource = async (options: any) => {
+const createFundingSource = async (options: any) => {
   try {
     return await dwollaClient
       .post(`customers/${options.customerId}/funding-sources`, {
@@ -89,7 +90,7 @@ export const createFundingSource = async (options: any) => {
   }
 };
 
-export const createOnDemandAuthorization = async () => {
+const createOnDemandAuthorization = async () => {
   try {
     const onDemandAuthorization = await dwollaClient.post(
       'on-demand-authorizations'
@@ -101,7 +102,7 @@ export const createOnDemandAuthorization = async () => {
   }
 };
 
-export const createDwollaCustomer = async (newCustomer: any) => {
+const createDwollaCustomer = async (newCustomer: any) => {
   try {
     return await dwollaClient
       .post('customers', newCustomer)
@@ -111,7 +112,7 @@ export const createDwollaCustomer = async (newCustomer: any) => {
   }
 };
 
-export const createTransfer = async ({
+const createTransfer = async ({
   sourceFundingSourceUrl,
   destinationFundingSourceUrl,
   amount,
@@ -139,7 +140,7 @@ export const createTransfer = async ({
   }
 };
 
-export const addFundingSource = async ({
+const addFundingSource = async ({
   dwollaCustomerId,
   processorToken,
   bankName,
@@ -394,6 +395,14 @@ app.use(
 /**
  * Handle all other requests by rendering the Angular application.
  */
+app.use(
+  express.static(browserDistFolder, {
+    maxAge: '1y',
+    index: false,
+    redirect: false,
+  })
+);
+
 app.use('/**', (req, res, next) => {
   angularApp
     .handle(req)
@@ -402,7 +411,6 @@ app.use('/**', (req, res, next) => {
     )
     .catch(next);
 });
-
 /**
  * Start the server if this module is the main entry point.
  * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
