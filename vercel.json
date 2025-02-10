@@ -2,7 +2,6 @@
   "version": 2,
   "public": true,
   "name": "banking",
-  "devCommand": "node dist/banking/server/server.mjs",
   "rewrites": [
     {
       "source": "/(.*)",
@@ -11,7 +10,7 @@
   ],
   "functions": {
     "api/index.js": {
-      "includeFiles": "dist/banking/browser/**"
+      "includeFiles": "dist/banking/**"
     }
   }
 }
