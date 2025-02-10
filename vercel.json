@@ -2,6 +2,7 @@
   "version": 2,
   "public": true,
   "name": "banking",
+  "devCommand": "node dist/banking/server.main.js",
   "rewrites": [
     {
       "source": "/(.*)",
